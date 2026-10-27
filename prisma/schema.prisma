@@ -1,0 +1,134 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id                  String        @id @default(cuid())
+  username            String        @unique
+  fullName            String
+  nip                 String?
+  passwordHash        String
+  roleId              String
+  role                Role          @relation(fields: [roleId], references: [id])
+  isActive            Boolean       @default(true)
+  mustChangePassword  Boolean       @default(false)
+  failedLoginAttempts Int           @default(0)
+  lockedUntil         DateTime?
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+
+  createdCases        Case[]        @relation("CaseAuthor")
+  reviewedCases       Case[]        @relation("CaseReviewer")
+  caseVersions        CaseVersion[]
+  caseComments        CaseComment[]
+  auditLogs           AuditLog[]
+}
+
+model Role {
+  id          String           @id @default(cuid())
+  name        String           @unique
+  description String?          @db.Text
+  isSystem    Boolean          @default(false)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  users       User[]
+  permissions RolePermission[]
+}
+
+model Permission {
+  id          String           @id @default(cuid())
+  code        String           @unique
+  module      String
+  name        String
+  description String?          @db.Text
+
+  roles       RolePermission[]
+}
+
+model RolePermission {
+  roleId       String
+  permissionId String
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+}
+
+model Case {
+  id                 String        @id @default(cuid())
+  caseNumber         String        @unique
+  productName        String
+  activeSubstance    String
+  applicantName      String
+  registrationNumber String?
+  status             String        @default("DRAFT") // DRAFT, ANALYZED, IN_REVIEW, FINAL
+  authorId           String
+  author             User          @relation("CaseAuthor", fields: [authorId], references: [id])
+  reviewerId         String?
+  reviewer           User?         @relation("CaseReviewer", fields: [reviewerId], references: [id])
+  evaluationDate     String?
+  responseDeadline   String?
+  reviewerNotes      String?       @db.Text
+  rawFormData        String        @db.LongText // JSON object containing all inputs from tes.html
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+
+  versions           CaseVersion[]
+  comments           CaseComment[]
+}
+
+model CaseVersion {
+  id                   String   @id @default(cuid())
+  caseId               String
+  case                 Case     @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  versionNumber        Int
+  formDataSnapshot     String   @db.LongText // JSON snapshot of form data at this run
+  verdict              String
+  summaryS             Int      @default(0)
+  summaryK             Int      @default(0)
+  summaryT             Int      @default(0)
+  gapAnalysisResults   String   @db.LongText // JSON array of gap analysis findings
+  deficiencyLetterText String   @db.LongText // Full text of the generated letter
+  createdById          String
+  createdBy            User     @relation(fields: [createdById], references: [id])
+  createdAt            DateTime @default(now())
+
+  @@unique([caseId, versionNumber])
+}
+
+model CaseComment {
+  id        String   @id @default(cuid())
+  caseId    String
+  case      Case     @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  username  String
+  action    String
+  entity    String
+  entityId  String?
+  summary   String   @db.Text
+  details   String?  @db.LongText // JSON additional details
+  ipAddress String?
+  createdAt DateTime @default(now())
+}
+
+model SystemSetting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String   @db.LongText
+  updatedAt DateTime @updatedAt
+}

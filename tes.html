@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CTD Compliance Reviewer — Modul 3 (Mutu)</title>
+<style>
+:root {
+  --bg-app: #f4f6f8;
+  --bg-surface: #ffffff;
+  --bg-muted: #f8fafc;
+  --bg-subtle: #edf2f7;
+  --border-strong: #cbd5e1;
+  --border-subtle: #e2e8f0;
+  
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --text-soft: #64748b;
+  
+  --navy-900: #0f172a;
+  --navy-800: #1e293b;
+  --navy-700: #334155;
+  --accent: #1e40af;
+  --accent-hover: #1d4ed8;
+  
+  --ok-bg: #ecfdf5;
+  --ok-border: #a7f3d0;
+  --ok-text: #065f46;
+  --ok-dot: #059669;
+  
+  --warn-bg: #fffbeb;
+  --warn-border: #fde68a;
+  --warn-text: #92400e;
+  --warn-dot: #d97706;
+  
+  --bad-bg: #fef2f2;
+  --bad-border: #fecaca;
+  --bad-text: #991b1b;
+  --bad-dot: #dc2626;
+
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-serif: "Times New Roman", Times, Georgia, "Cambria", serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background-color: var(--bg-app);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Header */
+header {
+  background-color: var(--navy-900);
+  color: #ffffff;
+  border-bottom: 3px solid var(--accent);
+  padding: 16px 28px;
+}
+.header-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.brand-group {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.brand-badge {
+  width: 38px;
+  height: 38px;
+  background: var(--navy-800);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #93c5fd;
+}
+.brand-titles h1 {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+}
+.brand-titles p {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+.header-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 11.5px;
+  color: #cbd5e1;
+}
+.header-tag {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+}
+
+/* Layout */
+main {
+  max-width: 1400px;
+  margin: 20px auto;
+  padding: 0 20px 40px;
+  display: grid;
+  grid-template-columns: 430px minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+@media (max-width: 1024px) {
+  main {
+    grid-template-columns: 1fr;
+    padding: 0 16px 32px;
+  }
+}
+
+/* Panel Sizing */
+@media (min-width: 1025px) {
+  #left {
+    position: sticky;
+    top: 16px;
+    max-height: calc(100vh - 32px);
+    overflow-y: auto;
+    padding-right: 6px;
+  }
+  #left::-webkit-scrollbar {
+    width: 6px;
+  }
+  #left::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+  }
+}
+
+/* Section Cards */
+section {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 16px;
+  margin-bottom: 14px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.step-num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  background: var(--bg-subtle);
+  color: var(--navy-700);
+  border: 1px solid var(--border-strong);
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+#left h2 {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--navy-800);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+#right h2 {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--navy-900);
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Sub-headers inside sections */
+.group-title {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--navy-700);
+  margin: 12px 0 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+/* Form Elements */
+label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin: 8px 0 3px;
+}
+input[type=text],
+input[type=number],
+select,
+textarea {
+  width: 100%;
+  padding: 6px 9px;
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--text-main);
+  background-color: #ffffff;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+input[type=text]:focus,
+input[type=number]:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--navy-800);
+  box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.1);
+}
+select {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 28px;
+  appearance: none;
+}
+textarea {
+  resize: vertical;
+}
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+/* Custom Checkbox Pills */
+.chk {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 5px;
+}
+.chk label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: var(--bg-muted);
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  padding: 3px 8px;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.1s ease;
+}
+.chk label:hover {
+  border-color: var(--border-strong);
+  background: var(--bg-subtle);
+}
+.chk label:has(input:checked) {
+  background: #eff6ff;
+  border-color: #93c5fd;
+  color: #1e40af;
+  font-weight: 600;
+}
+.chk input[type="checkbox"] {
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+/* Button & Action Bar */
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: var(--navy-900);
+  color: #ffffff;
+  border: 1px solid var(--navy-900);
+  border-radius: 4px;
+  padding: 7px 14px;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+button:hover {
+  background: var(--navy-800);
+  border-color: var(--navy-800);
+}
+button.alt {
+  background: #ffffff;
+  color: var(--navy-800);
+  border-color: var(--border-strong);
+}
+button.alt:hover {
+  background: var(--bg-muted);
+  border-color: var(--navy-700);
+}
+button.danger {
+  background: #ffffff;
+  color: var(--bad-text);
+  border-color: var(--bad-border);
+  padding: 3px 8px;
+  font-size: 11.5px;
+}
+button.danger:hover {
+  background: var(--bad-bg);
+  border-color: var(--bad-text);
+}
+#go {
+  background: var(--accent);
+  border-color: var(--accent);
+  font-weight: 600;
+  padding: 9px 20px;
+  font-size: 13.5px;
+}
+#go:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+
+/* Filter Checkbox */
+.flt {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  margin: 0;
+}
+.flt input {
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+/* Summary Grid & Verdict Card */
+.summary-meta-grid {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 14px;
+}
+.summary-meta-grid th,
+.summary-meta-grid td {
+  padding: 6px 10px;
+  font-size: 12.5px;
+  border: 1px solid var(--border-subtle);
+  vertical-align: middle;
+}
+.summary-meta-grid th {
+  background: var(--bg-muted);
+  color: var(--text-muted);
+  font-weight: 600;
+  width: 18%;
+}
+.summary-meta-grid td {
+  background: #ffffff;
+  color: var(--text-main);
+  font-weight: 500;
+}
+
+.verdict {
+  border-radius: 6px;
+  padding: 14px 16px;
+  margin: 12px 0 6px;
+  border-left: 4px solid;
+}
+.v-ok { background: var(--ok-bg); border: 1px solid var(--ok-border); border-left-color: var(--ok-dot); }
+.v-warn { background: var(--warn-bg); border: 1px solid var(--warn-border); border-left-color: var(--warn-dot); }
+.v-bad { background: var(--bad-bg); border: 1px solid var(--bad-border); border-left-color: var(--bad-dot); }
+
+.vt {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--navy-900);
+  margin-bottom: 10px;
+}
+.meter {
+  display: flex;
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.08);
+  gap: 1px;
+}
+.meter i { display: block; min-width: 0; }
+.m-ok { background: var(--ok-dot); }
+.m-warn { background: var(--warn-dot); }
+.m-bad { background: var(--bad-dot); }
+
+.vl {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 24px;
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.vl span {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+}
+.vl b {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--navy-900);
+  font-family: var(--font-mono);
+}
+
+/* Gap Analysis Table */
+.wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  background: #ffffff;
+}
+th, td {
+  padding: 8px 10px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border-subtle);
+}
+th {
+  background: var(--bg-muted);
+  font-weight: 600;
+  color: var(--navy-800);
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border-bottom: 2px solid var(--border-strong);
+  white-space: nowrap;
+}
+td:first-child {
+  font-weight: 600;
+  color: var(--navy-900);
+}
+.r-T td:first-child { box-shadow: inset 3px 0 var(--bad-dot); }
+.r-K td:first-child { box-shadow: inset 3px 0 var(--warn-dot); }
+.r-S td:first-child { box-shadow: inset 3px 0 var(--ok-dot); }
+.r-T { background-color: #fff9f9; }
+.r-K { background-color: #fffdf5; }
+.r-S:hover, .r-K:hover, .r-T:hover { background-color: #f1f5f9; }
+.only .r-S { display: none; }
+
+/* Status Pill */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 4px;
+  padding: 2px 7px;
+  font-weight: 600;
+  font-size: 11.5px;
+  white-space: nowrap;
+  border: 1px solid transparent;
+}
+.pill:before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.pill.Sesuai {
+  color: var(--ok-text);
+  background: var(--ok-bg);
+  border-color: var(--ok-border);
+}
+.pill.Klarifikasi {
+  color: var(--warn-text);
+  background: var(--warn-bg);
+  border-color: var(--warn-border);
+}
+.pill.Tidak {
+  color: var(--bad-text);
+  background: var(--bad-bg);
+  border-color: var(--bad-border);
+}
+
+/* Formal Deficiency Letter Viewport */
+.letter-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.letter-paper-wrapper {
+  background: #cbd5e1;
+  padding: 24px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+}
+#surat {
+  white-space: pre-wrap;
+  font-family: var(--font-serif);
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: #111827;
+  margin: 0 auto;
+  max-width: 800px;
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  padding: 48px 56px;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+  border-radius: 2px;
+}
+#surat.empty {
+  background: var(--bg-muted);
+  border: 1px dashed var(--border-strong);
+  box-shadow: none;
+  padding: 32px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--text-soft);
+  text-align: center;
+  border-radius: 6px;
+}
+.empty {
+  color: var(--text-soft);
+  font-size: 12.5px;
+}
+#ringkas.empty {
+  padding: 28px;
+  border: 1px dashed var(--border-strong);
+  border-radius: 4px;
+  text-align: center;
+  background: var(--bg-muted);
+}
+
+/* History Box */
+.hist {
+  display: flex;
+  flex-direction: column;
+}
+.hist div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 8px 0;
+  font-size: 12.5px;
+}
+.hist div:last-child {
+  border-bottom: none;
+}
+.hist a {
+  color: var(--accent);
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: none;
+}
+.hist a:hover {
+  text-decoration: underline;
+}
+
+/* Print Optimization */
+@media print {
+  header, #left, .bar, #hist, .flt, .letter-toolbar {
+    display: none !important;
+  }
+  body, main {
+    background: #ffffff !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  main {
+    display: block !important;
+  }
+  section {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  .letter-paper-wrapper {
+    background: transparent !important;
+    padding: 0 !important;
+  }
+  #surat {
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+    font-size: 12pt !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brand-group">
+      <div class="brand-badge">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <path d="m9 12 2 2 4-4"/>
+        </svg>
+      </div>
+      <div class="brand-titles">
+        <h1>CTD Compliance Reviewer</h1>
+        <p>Telaah Modul 3 (Mutu) • PerKa BPOM No. 24/2017 jo. No. 23/2025 • ASEAN Stability Guideline Zona IVb</p>
+      </div>
+    </div>
+    <div class="header-meta">
+      <span class="header-tag">ACTD / ICH Q2(R1)</span>
+      <span class="header-tag">Offline Engine</span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- Left Column: Inputs -->
+  <div id="left">
+    <section>
+      <div class="card-header">
+        <span class="step-num">01</span>
+        <h2>Identitas Dossier</h2>
+      </div>
+      <label>Nama produk / kekuatan sediaan</label>
+      <input type="text" id="produk" placeholder="mis. Amoxicillin Kapsul 500 mg">
+      
+      <label>Bahan aktif (API)</label>
+      <input type="text" id="api" placeholder="mis. Amoxicillin Trihydrate">
+      
+      <div class="row">
+        <div>
+          <label>Nama pemohon</label>
+          <input type="text" id="pemohon" placeholder="PT Industri Farmasi">
+        </div>
+        <div>
+          <label>No. registrasi / referensi</label>
+          <input type="text" id="noreg" placeholder="mis. REG-2026-0012">
+        </div>
+      </div>
+      
+      <div class="row">
+        <div>
+          <label>Tanggal surat evaluasi</label>
+          <input type="text" id="tgl" placeholder="mis. 15 Oktober 2026">
+        </div>
+        <div>
+          <label>Batas waktu tanggapan</label>
+          <input type="text" id="batas" placeholder="mis. 30 hari kerja">
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="card-header">
+        <span class="step-num">02</span>
+        <h2>Mutu Bahan Aktif (CoA API)</h2>
+      </div>
+      <div class="row">
+        <div>
+          <label>Jumlah batch pada CoA</label>
+          <input type="number" id="nbatch" min="0" value="3">
+        </div>
+        <div>
+          <label>Skala batch</label>
+          <select id="skala">
+            <option>Komersial</option>
+            <option>Pilot</option>
+            <option>Laboratorium</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label>Standar spesifikasi</label>
+          <select id="std">
+            <option>USP</option>
+            <option>BP</option>
+            <option>Ph.Eur</option>
+            <option>FI</option>
+            <option>In-House</option>
+            <option value="">Tidak dinyatakan</option>
+          </select>
+        </div>
+        <div>
+          <label>Produsen API terdaftar?</label>
+          <select id="terdaftar">
+            <option value="1">Ya (Terdaftar)</option>
+            <option value="0">Tidak</option>
+          </select>
+        </div>
+      </div>
+      <label>Pernyataan batch berurutan?</label>
+      <select id="urut">
+        <option value="1">Ya, 3 batch berurutan</option>
+        <option value="0">Tidak / tidak dinyatakan</option>
+      </select>
+    </section>
+
+    <section>
+      <div class="card-header">
+        <span class="step-num">03</span>
+        <h2>Stabilitas Obat Jadi</h2>
+      </div>
+      <span class="group-title">A. Real-Time (Long-Term)</span>
+      <div class="row">
+        <div>
+          <label>Suhu (°C)</label>
+          <input type="number" id="ltT" value="30">
+        </div>
+        <div>
+          <label>RH (%)</label>
+          <input type="number" id="ltH" value="75">
+        </div>
+      </div>
+      <label>Interval pengujian tersedia (bulan)</label>
+      <div class="chk" id="ltI"></div>
+      
+      <div class="row" style="margin-top:6px">
+        <div>
+          <label>Data terlama (bulan)</label>
+          <input type="number" id="ltM" value="12">
+        </div>
+        <div>
+          <label>Studi barrier / ekstrapolasi?</label>
+          <select id="barrier">
+            <option value="0">Tidak ada</option>
+            <option value="1">Ada &amp; tervalidasi</option>
+          </select>
+        </div>
+      </div>
+
+      <span class="group-title" style="margin-top:14px">B. Accelerated (Dipercepat)</span>
+      <div class="row">
+        <div>
+          <label>Suhu (°C)</label>
+          <input type="number" id="acT" value="40">
+        </div>
+        <div>
+          <label>RH (%)</label>
+          <input type="number" id="acH" value="75">
+        </div>
+      </div>
+      <label>Interval pengujian tersedia (bulan)</label>
+      <div class="chk" id="acI"></div>
+      <label>Durasi pengujian (bulan)</label>
+      <input type="number" id="acM" value="6">
+    </section>
+
+    <section>
+      <div class="card-header">
+        <span class="step-num">04</span>
+        <h2>Validasi Metode Analisis (VMA)</h2>
+      </div>
+      <label>Jenis prosedur analisis (ICH Q2(R1))</label>
+      <select id="vproc">
+        <option value="assay">Assay (kadar zat aktif)</option>
+        <option value="impq">Impuritas kuantitatif</option>
+        <option value="impl">Uji batas impuritas</option>
+        <option value="ident">Identifikasi</option>
+      </select>
+      
+      <label>Kriteria penilaian parameter</label>
+      <select id="vmode">
+        <option value="proj">Kriteria proyek (7 parameter wajib)</option>
+        <option value="q2">ICH Q2(R1) sesuai jenis prosedur</option>
+      </select>
+      
+      <label style="margin-top:10px">Parameter yang telah divalidasi</label>
+      <div class="chk" id="vma"></div>
+      
+      <div class="row" style="margin-top:8px">
+        <div>
+          <label>Konsentrasi linearitas (n)</label>
+          <input type="number" id="vlinN" value="5">
+        </div>
+        <div>
+          <label>Determinasi akurasi (n)</label>
+          <input type="number" id="vaccN" value="9">
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label>Level konsentrasi akurasi</label>
+          <input type="number" id="vaccL" value="3">
+        </div>
+        <div>
+          <label>Repeatability</label>
+          <select id="vrepC">
+            <option value="9">9 determinasi (3 level × 3)</option>
+            <option value="6">6 determinasi pada 100%</option>
+            <option value="0">Kurang dari minimal</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label>Rentang bawah (% uji)</label>
+          <input type="number" id="vlo" value="80">
+        </div>
+        <div>
+          <label>Rentang atas (% uji)</label>
+          <input type="number" id="vhi" value="120">
+        </div>
+      </div>
+      <label>Catatan reviewer (opsional)</label>
+      <textarea id="cat" rows="2" placeholder="Tambahan catatan teknis jika diperlukan..."></textarea>
+    </section>
+
+    <section>
+      <div class="card-header">
+        <span class="step-num">05</span>
+        <h2>Praregistrasi &amp; Jalur Evaluasi</h2>
+      </div>
+      <label>Jalur evaluasi diajukan (PerKa BPOM 23/2025)</label>
+      <select id="jalur">
+        <option value="">Tidak diperiksa</option>
+        <option value="90">90 hari (referensi negara dikenal baik)</option>
+        <option value="100">100 hari</option>
+        <option value="150">150 hari (generik / generik bermerek)</option>
+        <option value="300">300 hari</option>
+        <option value="lain">Jalur lain</option>
+      </select>
+      
+      <div class="row">
+        <div>
+          <label>Ringkasan Mutu (QOS)</label>
+          <select id="qos">
+            <option value="1">Ada</option>
+            <option value="0">Tidak ada</option>
+          </select>
+        </div>
+        <div>
+          <label>Bahan asal hewan</label>
+          <select id="hewan">
+            <option value="1">Ada / pernyataan bebas</option>
+            <option value="0">Tidak ada</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label>DMF zat aktif</label>
+          <select id="dmf">
+            <option value="1">Ada</option>
+            <option value="2">Tidak perlu (API izin edar RI)</option>
+            <option value="0">Diperlukan, tidak ada</option>
+          </select>
+        </div>
+        <div>
+          <label>Data ekivalensi</label>
+          <select id="eqv">
+            <option value="1">Ringkasan / protokol ada</option>
+            <option value="2">Justifikasi tidak perlu uji</option>
+            <option value="0">Tidak ada</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="j90" style="margin-top:10px; padding:10px; background:var(--bg-muted); border:1px solid var(--border-subtle); border-radius:4px;">
+        <span class="group-title" style="margin-top:0">Ketentuan Khusus Jalur 90 Hari</span>
+        <label>Negara referensi</label>
+        <select id="refc">
+          <option value="">Belum dipilih</option>
+          <option>Uni Eropa</option>
+          <option>Amerika Serikat</option>
+          <option>Australia</option>
+          <option>Kanada</option>
+          <option>Inggris</option>
+          <option>Jepang</option>
+          <option>Swiss</option>
+          <option>Lainnya</option>
+        </select>
+        <div class="row">
+          <div>
+            <label>Persetujuan ≤ 5 tahun?</label>
+            <select id="ref5">
+              <option value="1">Ya</option>
+              <option value="0">Tidak</option>
+            </select>
+          </div>
+          <div>
+            <label>AR lengkap (Inggris)</label>
+            <select id="ar">
+              <option value="1">Ada</option>
+              <option value="0">Tidak ada</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label>Matriks &amp; surat mutu sama</label>
+            <select id="pern">
+              <option value="1">Ada</option>
+              <option value="0">Tidak ada</option>
+            </select>
+          </div>
+          <div>
+            <label>Antiinfeksi / HCV / TB?</label>
+            <select id="kate">
+              <option value="0">Bukan</option>
+              <option value="1">Ya</option>
+            </select>
+          </div>
+        </div>
+        <label>Aspek mutu identik dengan negara referensi?</label>
+        <select id="ident">
+          <option value="1">Ya, identik</option>
+          <option value="0">Ada perbedaan</option>
+        </select>
+      </div>
+    </section>
+
+    <div class="bar" style="margin-bottom:14px;">
+      <button id="go">Analisis Dossier</button>
+      <button class="alt" id="reset">Kasus Baru</button>
+    </div>
+
+    <section id="hist">
+      <div class="card-header">
+        <h2>Riwayat Kasus Tersimpan</h2>
+      </div>
+      <div class="hist" id="histList"></div>
+    </section>
+  </div>
+
+  <!-- Right Column: Outputs -->
+  <div id="right">
+    <section>
+      <h2>Ringkasan Hasil Evaluasi</h2>
+      <div id="ringkas" class="empty">
+        Silakan isi data dossier di panel sebelah kiri, kemudian klik tombol <b>Analisis Dossier</b>.
+      </div>
+    </section>
+
+    <section>
+      <h2>
+        <span>Gap Analysis &amp; Pemenuhan Regulasi</span>
+        <label class="flt">
+          <input type="checkbox" id="onlyf"> Hanya tampilkan temuan
+        </label>
+      </h2>
+      <div class="wrap" id="tabel"></div>
+    </section>
+
+    <section>
+      <div class="letter-toolbar">
+        <h2>Draft Deficiency Letter (Resmi)</h2>
+        <div class="bar">
+          <button id="cp" class="alt">Salin Teks</button>
+          <button id="dw" class="alt">Unduh (.doc)</button>
+          <button id="pr" class="alt">Cetak / PDF</button>
+          <button id="sv">Simpan Kasus</button>
+          <button id="ex" class="alt">Ekspor (.json)</button>
+        </div>
+      </div>
+      <div class="letter-paper-wrapper">
+        <pre id="surat" class="empty">Draft surat belum digenerate. Klik "Analisis Dossier" untuk membuat draft surat.</pre>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+const LT = [0, 3, 6, 9, 12, 18, 24], AC = [0, 1, 3, 6];
+const VMA = [
+  ["acc", "Akurasi"],
+  ["rep", "Presisi: repeatability"],
+  ["ip", "Presisi: intermediate precision"],
+  ["spec", "Spesifisitas"],
+  ["lod", "LOD/LOQ"],
+  ["lin", "Linearitas"],
+  ["range", "Range"],
+  ["rob", "Robustness"]
+];
+
+function boxes(id, arr, pre, def) {
+  $(id).innerHTML = arr.map(v => 
+    `<label><input type="checkbox" id="${pre}${v}" ${def.includes(v) ? 'checked' : ''}><span>${v} bln</span></label>`
+  ).join('');
+}
+boxes('ltI', LT, 'lt', [0, 3, 6, 9, 12]);
+boxes('acI', AC, 'ac', AC);
+
+$('vma').innerHTML = VMA.map(([k, n]) => 
+  `<label><input type="checkbox" id="v_${k}" checked><span>${n}</span></label>`
+).join('');
+
+const FIELDS = [
+  'produk', 'api', 'pemohon', 'noreg', 'tgl', 'batas', 'nbatch', 'skala', 'std', 'terdaftar', 'urut',
+  'ltT', 'ltH', 'ltM', 'barrier', 'vproc', 'vmode', 'vlinN', 'vaccN', 'vaccL', 'vrepC', 'vlo', 'vhi',
+  'jalur', 'qos', 'hewan', 'dmf', 'eqv', 'refc', 'ref5', 'ar', 'pern', 'kate', 'ident', 'acT', 'acH', 'acM', 'cat'
+];
+
+function read() {
+  const d = {};
+  FIELDS.forEach(f => d[f] = $(f).value);
+  d.ltI = LT.filter(v => $('lt' + v).checked);
+  d.acI = AC.filter(v => $('ac' + v).checked);
+  d.vma = VMA.filter(([k]) => $('v_' + k).checked).map(x => x[0]);
+  return d;
+}
+
+function write(d) {
+  FIELDS.forEach(f => {
+    if (d[f] !== undefined) $(f).value = d[f];
+  }); 
+  LT.forEach(v => $('lt' + v).checked = d.ltI.includes(v));
+  AC.forEach(v => $('ac' + v).checked = d.acI.includes(v));
+  VMA.forEach(([k]) => $('v_' + k).checked = d.vma.includes(k));
+}
+
+const ST = { S: 'Sesuai', K: 'Perlu Klarifikasi', T: 'Tidak Sesuai' };
+
+function analyze(d) {
+  const R = [], add = (p, f, s, st, n, q) => R.push({ p, f, s, st, n, q });
+  const nb = +d.nbatch;
+  
+  add('CoA API: jumlah batch', `${nb} batch`, 'Minimal 3 batch berurutan skala pilot/komersial (BPOM 24/2017)', nb >= 3 ? 'S' : 'T', nb >= 3 ? 'Memenuhi jumlah minimal.' : 'Data konsistensi mutu belum memadai.', `Jumlah batch CoA bahan aktif hanya ${nb}; mohon lengkapi CoA dari minimal 3 batch produksi berurutan skala pilot atau komersial.`);
+  add('CoA API: skala batch', d.skala, 'Skala pilot atau komersial', d.skala === 'Laboratorium' ? 'T' : 'S', d.skala === 'Laboratorium' ? 'Batch skala laboratorium tidak mewakili produksi.' : 'Memenuhi.', `CoA bahan aktif berasal dari batch skala laboratorium; mohon sampaikan CoA batch skala pilot atau komersial.`);
+  add('CoA API: produsen terdaftar', d.terdaftar === '1' ? 'Terdaftar' : 'Tidak terdaftar', 'CoA dari produsen bahan baku yang terdaftar', d.terdaftar === '1' ? 'S' : 'T', 'Status registrasi produsen API perlu terverifikasi.', `Mohon lampirkan bukti registrasi produsen bahan aktif dan CoA yang diterbitkan oleh produsen tersebut.`);
+  add('CoA API: batch berurutan', d.urut === '1' ? 'Dinyatakan berurutan' : 'Tidak dinyatakan', '3 batch produksi berurutan', d.urut === '1' ? 'S' : 'K', 'Keberurutan batch perlu dikonfirmasi.', `Mohon konfirmasi bahwa batch pada CoA merupakan batch produksi berurutan, disertai nomor batch dan tanggal produksi.`);
+  add('Standar spesifikasi API', d.std || 'Tidak dinyatakan', 'Kompendia (USP/BP/Ph.Eur/FI) atau In-House', d.std ? 'S' : 'T', d.std === 'In-House' ? 'In-House diterima; pastikan metode tervalidasi.' : (d.std ? 'Memenuhi.' : 'Acuan spesifikasi belum disebutkan.'), `Mohon jelaskan standar spesifikasi bahan aktif (kompendia atau in-house) beserta metode analisisnya.`);
+
+  const t = +d.ltT, h = +d.ltH, okLT = Math.abs(t - 30) <= 2 && Math.abs(h - 75) <= 5, zI = t <= 26 && h <= 65;
+  let stLT = okLT ? 'S' : (zI && d.barrier === '1' ? 'K' : 'T');
+  add('Stabilitas real-time: kondisi', `${t}°C / ${h}% RH`, '30°C ± 2°C / 75% RH ± 5% RH (Zona IVb)', stLT, okLT ? 'Memenuhi Zona IVb.' : (stLT === 'K' ? 'Zona I/II dengan studi ekstrapolasi/barrier; evaluasi validitas studi.' : 'Data Zona I/II tidak dapat diterima tanpa ekstrapolasi/barrier tervalidasi.'),
+    okLT ? '' : `Studi stabilitas real-time dilakukan pada ${t}°C / ${h}% RH, tidak sesuai Zona IVb (30°C ± 2°C / 75% RH ± 5% RH). Mohon sampaikan data pada kondisi Zona IVb atau studi ekstrapolasi/kemasan barrier tinggi yang tervalidasi.`);
+  
+  const mLT = +d.ltM, missLT = [0, 3, 6, 9, 12].filter(v => !d.ltI.includes(v));
+  add('Stabilitas real-time: data minimal', `${mLT} bulan`, 'Minimal 12 bulan data real-time saat pengajuan', mLT >= 12 ? 'S' : 'T', mLT >= 12 ? 'Memenuhi.' : 'Data belum mencapai 12 bulan.', `Data stabilitas real-time baru ${mLT} bulan; minimal 12 bulan pada kondisi Zona IVb saat pengajuan awal.`);
+  add('Stabilitas real-time: interval', d.ltI.join(', ') || '-', '0, 3, 6, 9, 12, 18, 24 bulan, lalu tahunan', missLT.length ? 'T' : (d.ltI.includes(18) && d.ltI.includes(24) ? 'S' : 'K'), missLT.length ? `Interval ${missLT.join(', ')} bulan belum ada.` : (d.ltI.includes(18) && d.ltI.includes(24) ? 'Lengkap.' : 'Interval 18 dan 24 bulan belum tersedia; sertakan komitmen kelanjutan studi.'),
+    missLT.length ? `Interval pengujian real-time ${missLT.join(', ')} bulan tidak tersedia; mohon lengkapi.` : `Mohon sampaikan komitmen dan jadwal kelanjutan pengujian real-time 18, 24 bulan dan seterusnya hingga shelf-life yang diajukan.`);
+
+  const at = +d.acT, ah = +d.acH, okAC = Math.abs(at - 40) <= 2 && Math.abs(ah - 75) <= 5;
+  add('Stabilitas dipercepat: kondisi', `${at}°C / ${ah}% RH`, '40°C ± 2°C / 75% RH ± 5% RH', okAC ? 'S' : 'T', okAC ? 'Memenuhi.' : 'Kondisi menyimpang.', `Kondisi uji dipercepat ${at}°C / ${ah}% RH tidak sesuai 40°C ± 2°C / 75% RH ± 5% RH; mohon lengkapi data pada kondisi yang sesuai.`);
+  
+  const missAC = AC.filter(v => !d.acI.includes(v)), mAC = +d.acM;
+  add('Stabilitas dipercepat: durasi dan interval', `${mAC} bulan; interval ${d.acI.join(', ') || '-'}`, 'Minimal 6 bulan; interval 0, 1, 3, 6', (mAC >= 6 && !missAC.length) ? 'S' : 'T', mAC < 6 ? 'Durasi kurang dari 6 bulan.' : (missAC.length ? `Interval ${missAC.join(', ')} bulan belum ada.` : 'Memenuhi.'),
+    `Studi dipercepat harus berdurasi minimal 6 bulan dengan interval 0, 1, 3, 6 bulan${mAC < 6 ? ` (durasi saat ini ${mAC} bulan)` : ''}${missAC.length ? `; interval ${missAC.join(', ')} bulan belum tersedia` : ''}.`);
+
+  {
+    const proj = ['acc', 'rep', 'ip', 'spec', 'lod', 'lin', 'rob'],
+      MX = { ident: ['spec'], impq: ['acc', 'rep', 'ip', 'spec', 'lod', 'lin', 'range'], impl: ['spec', 'lod'], assay: ['acc', 'rep', 'ip', 'spec', 'lin', 'range'] },
+      q2 = d.vmode === 'q2',
+      req = q2 ? MX[d.vproc] : proj,
+      PN = { ident: 'uji identifikasi', impq: 'uji impuritas kuantitatif', impl: 'uji batas impuritas', assay: 'assay (kadar)' }[d.vproc];
+    
+    const src = q2 ? `ICH Q2(R1), tabel karakteristik untuk ${PN}` : 'Kriteria proyek: parameter wajib VMA';
+    
+    VMA.forEach(([k, n]) => {
+      const has = d.vma.includes(k), need = req.includes(k);
+      if (!need && !(q2 && k === 'rob')) return;
+      const soft = !need, st = has ? 'S' : (soft ? 'K' : 'T');
+      const extra = (!q2 && !has && !MX[d.vproc].includes(k) && k !== 'rob') ? ` Catatan: ICH Q2(R1) tidak umum mengevaluasi parameter ini untuk ${PN}.` : '';
+      add('VMA: ' + n, has ? 'Tersedia' : 'Tidak ditemukan', soft ? 'ICH Q2(R1): robustness dipertimbangkan pada tahap pengembangan prosedur' : src, st, has ? 'Memenuhi.' : (soft ? 'Data robustness belum ada.' : 'Parameter wajib belum divalidasi.') + extra, `Hasil validasi metode analisis untuk parameter ${n} tidak ditemukan; mohon lengkapi data dan kriteria penerimaan.`);
+    });
+    
+    const Q = 'ICH Q2(R1) ', V = d.vma;
+    if (V.includes('lin')) add('VMA: linearitas, jumlah konsentrasi', `${d.vlinN} konsentrasi`, Q + 'Part II 2: minimal 5 konsentrasi', +d.vlinN >= 5 ? 'S' : 'T', +d.vlinN >= 5 ? 'Memenuhi.' : 'Jumlah konsentrasi kurang.', `Linearitas hanya menggunakan ${d.vlinN} konsentrasi; mohon lengkapi minimal 5 konsentrasi beserta koefisien korelasi, y-intercept, slope, dan residual sum of squares serta plot data.`);
+    
+    const accOk = +d.vaccN >= 9 && +d.vaccL >= 3;
+    if (V.includes('acc')) add('VMA: akurasi, jumlah determinasi', `${d.vaccN} determinasi / ${d.vaccL} level`, Q + 'Part II 4.3: minimal 9 determinasi pada minimal 3 level', accOk ? 'S' : 'T', accOk ? 'Memenuhi.' : 'Data akurasi kurang dari rekomendasi.', `Data akurasi (${d.vaccN} determinasi pada ${d.vaccL} level) belum memenuhi minimal 9 determinasi pada minimal 3 level konsentrasi yang mencakup range; mohon lengkapi dengan persen recovery dan confidence interval.`);
+    
+    if (V.includes('rep')) add('VMA: repeatability, jumlah determinasi', { 9: '9 determinasi (3x3)', 6: '6 determinasi pada 100%', 0: 'Kurang dari minimal' }[d.vrepC], Q + 'Part II 5.1: minimal 9 determinasi (3x3) atau 6 determinasi pada 100% konsentrasi uji', d.vrepC === '0' ? 'T' : 'S', d.vrepC === '0' ? 'Jumlah determinasi kurang.' : 'Memenuhi.', `Jumlah determinasi repeatability belum memenuhi minimal 9 determinasi (3 konsentrasi x 3 replikasi) atau 6 determinasi pada 100% konsentrasi uji; mohon sertakan SD, RSD, dan confidence interval.`);
+    
+    if (V.includes('range') && d.vproc === 'assay') {
+      const ok = +d.vlo <= 80 && +d.vhi >= 120;
+      add('VMA: range assay', `${d.vlo}-${d.vhi}%`, Q + 'Part II 3: assay minimal 80-120% konsentrasi uji', ok ? 'S' : 'T', ok ? 'Memenuhi.' : 'Range lebih sempit dari minimal.', `Range tervalidasi (${d.vlo}-${d.vhi}%) lebih sempit dari minimal 80-120% konsentrasi uji untuk assay; mohon lengkapi data linearitas, akurasi, dan presisi pada range tersebut.`);
+    }
+  }
+
+  const P = 'Lampiran III.B Perban BPOM 23/2025';
+  add('Praregistrasi: Ringkasan Dokumen Mutu (QOS)', d.qos === '1' ? 'Ada' : 'Tidak ada', P, d.qos === '1' ? 'S' : 'T', d.qos === '1' ? 'Memenuhi.' : 'QOS tidak ditemukan.', 'Mohon lampirkan Ringkasan Dokumen Mutu (Quality Overall Summary).');
+  add('Praregistrasi: informasi bahan asal hewan', d.hewan === '1' ? 'Ada' : 'Tidak ada', P, d.hewan === '1' ? 'S' : 'K', d.hewan === '1' ? 'Memenuhi.' : 'Informasi belum disampaikan.', 'Mohon sampaikan informasi bahan bersumber hewan pada pembuatan zat aktif dan obat, atau pernyataan bahwa bahan tersebut tidak digunakan.');
+  add('Praregistrasi: DMF zat aktif', { 1: 'Ada', 2: 'Tidak diperlukan', 0: 'Tidak ada' }[d.dmf], P + ' (zat aktif yang belum pernah digunakan pada obat berizin edar di Indonesia)', d.dmf === '0' ? 'T' : 'S', d.dmf === '0' ? 'DMF diperlukan namun tidak tersedia.' : 'Memenuhi.', 'Mohon lampirkan DMF atau dokumen setara dari produsen zat aktif.');
+  add('Praregistrasi: data ekivalensi', { 1: 'Ringkasan/protokol', 2: 'Justifikasi tidak perlu uji', 0: 'Tidak ada' }[d.eqv], P, d.eqv === '0' ? 'T' : 'S', d.eqv === '0' ? 'Data atau justifikasi belum ada.' : 'Memenuhi.', 'Mohon lampirkan ringkasan/protokol data ekivalensi atau justifikasi bahwa uji ekivalensi tidak diperlukan.');
+  
+  if (d.jalur === '90') {
+    const J = 'Pasal 37(1)h dan Lampiran III.A.4 Perban 23/2025', lst = ['Uni Eropa', 'Amerika Serikat', 'Australia', 'Kanada', 'Inggris', 'Jepang', 'Swiss'];
+    const j = (p, ok, f, s, bad, q) => add(p, f, s, ok ? 'S' : 'T', ok ? 'Memenuhi.' : bad, q);
+    j('Jalur 90 hari: negara referensi', lst.includes(d.refc), d.refc || 'Belum dipilih', 'UE, AS, Australia, Kanada, Inggris, Jepang, atau Swiss', 'Bukan negara referensi yang ditetapkan.', 'Negara referensi yang diajukan tidak termasuk daftar yang ditetapkan (Uni Eropa, Amerika Serikat, Australia, Kanada, Inggris, Jepang, Swiss); mohon sesuaikan atau ajukan melalui jalur evaluasi lain.');
+    j('Jalur 90 hari: usia persetujuan', d.ref5 === '1', d.ref5 === '1' ? 'Dalam 5 tahun' : 'Lebih dari 5 tahun', 'Disetujui dalam 5 tahun terakhir', 'Persetujuan melebihi 5 tahun.', 'Persetujuan di negara referensi harus diperoleh dalam 5 tahun terakhir; mohon sampaikan bukti yang sahih.');
+    j('Jalur 90 hari: assessment report', d.ar === '1', d.ar === '1' ? 'Ada' : 'Tidak ada', 'AR lengkap dalam Bahasa Inggris', 'AR tidak tersedia.', 'Mohon lampirkan dokumen assessment report lengkap dari otoritas negara referensi dalam Bahasa Inggris.');
+    j('Jalur 90 hari: surat pernyataan dan matriks mutu', d.pern === '1', d.pern === '1' ? 'Ada' : 'Tidak ada', 'Pernyataan mutu sama (termasuk DMF) + matriks sandingan', 'Dokumen pernyataan belum ada.', 'Mohon lampirkan surat pernyataan bahwa seluruh aspek mutu (termasuk DMF) sama dengan yang disetujui di negara referensi, disertai matriks sandingan mutu.');
+    j('Jalur 90 hari: kesamaan aspek mutu', d.ident === '1', d.ident === '1' ? 'Identik' : 'Ada perbedaan', 'Sumber bahan baku, formula, tempat produksi, spesifikasi rilis, dan shelf life sama', 'Aspek mutu berbeda dari negara referensi.', 'Terdapat perbedaan aspek mutu terhadap yang disetujui di negara referensi; seluruh aspek mutu harus sama, atau mohon ajukan melalui jalur evaluasi lain.');
+    j('Jalur 90 hari: kategori obat', d.kate === '0', d.kate === '1' ? 'Kategori khusus' : 'Bukan kategori khusus', 'Bukan antiinfeksi/antivirus (HCV, HIV)/antimalaria/TB', 'Memerlukan evaluasi khusus.', 'Obat termasuk kategori yang memerlukan evaluasi khusus sehingga tidak dapat menggunakan jalur evaluasi 90 hari.');
+  }
+  return R;
+}
+
+function render(d, R) {
+  const c = { S: 0, K: 0, T: 0 };
+  R.forEach(r => c[r.st]++);
+  const verdict = c.T ? 'Dossier belum memenuhi ketentuan regulasi: perlu penerbitan Deficiency Letter.' : (c.K ? 'Dossier secara umum memenuhi ketentuan, dengan catatan klarifikasi teknis.' : 'Dossier dinyatakan memenuhi seluruh parameter yang ditelaah.');
+  
+  $('ringkas').className = '';
+  $('ringkas').innerHTML = `
+    <table class="summary-meta-grid">
+      <tr>
+        <th>Produk</th><td>${esc(d.produk) || '-'}</td>
+        <th>Bahan Aktif</th><td>${esc(d.api) || '-'}</td>
+      </tr>
+      <tr>
+        <th>Pemohon</th><td>${esc(d.pemohon) || '-'}</td>
+        <th>Referensi</th><td>${esc(d.noreg) || '-'}</td>
+      </tr>
+    </table>
+    <div class="verdict ${c.T ? 'v-bad' : c.K ? 'v-warn' : 'v-ok'}">
+      <div class="vt">${verdict}</div>
+      <div class="meter">
+        <i class="m-ok" style="flex:${c.S}"></i>
+        <i class="m-warn" style="flex:${c.K}"></i>
+        <i class="m-bad" style="flex:${c.T}"></i>
+      </div>
+      <div class="vl">
+        <span><b>${c.S}</b> parameter sesuai</span>
+        <span><b>${c.K}</b> butir klarifikasi</span>
+        <span><b>${c.T}</b> ketidaksesuaian (gap)</span>
+      </div>
+    </div>
+    ${d.cat ? `<p style="margin-top:10px; font-size:12.5px; color:var(--text-muted);"><b>Catatan Evaluator:</b> ${esc(d.cat)}</p>` : ''}
+  `;
+
+  const cls = { S: 'Sesuai', K: 'Klarifikasi', T: 'Tidak' };
+  $('tabel').innerHTML = `
+    <table>
+      <thead>
+        <tr>
+          <th style="width:26%">Parameter Evaluasi</th>
+          <th style="width:20%">Temuan Dokumen</th>
+          <th style="width:22%">Standar Acuan</th>
+          <th style="width:14%">Status</th>
+          <th style="width:18%">Catatan Penelaahan</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${R.map(r => `
+          <tr class="r-${r.st}">
+            <td>${r.p}</td>
+            <td>${esc(r.f)}</td>
+            <td>${r.s}</td>
+            <td><span class="pill ${cls[r.st]}">${ST[r.st]}</span></td>
+            <td>${r.n}</td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+
+  const defs = R.filter(r => r.st !== 'S');
+  const L = [];
+  L.push(
+    `Nomor   : ........................`,
+    `Perihal : Permintaan Data Tambahan (Deficiency Letter) Dokumen Mutu`,
+    `Tanggal : ${d.tgl || '........................'}`,
+    '',
+    `Kepada Yth.`,
+    `${d.pemohon || '[Nama Pemohon Registrasi]'}`,
+    '',
+    `Dengan hormat,`,
+    '',
+    `Sehubungan dengan evaluasi Dokumen Mutu (Modul 3 / Bagian II ACTD) untuk produk ${d.produk || '[nama produk]'} dengan bahan aktif ${d.api || '[bahan aktif]'}${d.noreg ? ` (ref. ${d.noreg})` : ''}, berdasarkan Peraturan Kepala BPOM No. 24 Tahun 2017 sebagaimana telah diubah terakhir dengan Peraturan BPOM No. 23 Tahun 2025, serta ASEAN Stability Guideline (Zona IVb) dan ICH Q2(R1), kami menemukan hal-hal berikut yang memerlukan klarifikasi dan data tambahan:`,
+    ''
+  );
+  
+  if (!defs.length) {
+    L.push('Tidak terdapat kekurangan data pada parameter yang ditelaah.');
+  } else {
+    defs.forEach((r, i) => L.push(`${i + 1}. [${r.st === 'T' ? 'Mayor' : 'Minor'}] ${r.q}`));
+  }
+  
+  L.push(
+    '',
+    `Mohon tanggapan tertulis disertai data pendukung disampaikan dalam waktu ${d.batas || '[....] hari kerja'} sejak surat ini diterima. Evaluasi akan dilanjutkan setelah data dinyatakan lengkap.`,
+    '',
+    `Demikian disampaikan, atas perhatian dan kerja sama Saudara kami ucapkan terima kasih.`,
+    '',
+    `Hormat kami,`,
+    '',
+    '',
+    '(Tim Evaluator Mutu Obat Jadi)'
+  );
+  
+  $('surat').className = '';
+  $('surat').textContent = L.join('\n');
+}
+
+function esc(s) {
+  return String(s || '').replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m]));
+}
+
+let cur = null;
+function run() {
+  const d = read();
+  cur = d;
+  render(d, analyze(d));
+}
+
+$('go').onclick = run;
+$('onlyf').onchange = e => $('tabel').classList.toggle('only', e.target.checked);
+$('reset').onclick = () => { location.reload(); };
+$('cp').onclick = () => {
+  navigator.clipboard.writeText($('surat').textContent).then(() => {
+    $('cp').textContent = 'Tersalin ✓';
+    setTimeout(() => { $('cp').textContent = 'Salin Teks'; }, 1500);
+  });
+};
+
+function dl(name, type, txt) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([txt], { type }));
+  a.download = name;
+  a.click();
+}
+
+$('dw').onclick = () => {
+  if (!cur) run();
+  dl('Deficiency-Letter.doc', 'application/msword', `<html><meta charset="utf-8"><body style="font-family:Times New Roman;font-size:12pt"><pre style="font-family:inherit;white-space:pre-wrap">${esc($('surat').textContent)}</pre></body></html>`);
+};
+
+$('pr').onclick = () => {
+  if (!cur) run();
+  window.print();
+};
+
+$('ex').onclick = () => {
+  if (!cur) run();
+  dl('kasus-' + (cur.produk || 'ctd').replace(/\W+/g, '_') + '.json', 'application/json', JSON.stringify(cur, null, 1));
+};
+
+function hist() {
+  try {
+    return JSON.parse(localStorage.getItem('ctdCases') || '[]');
+  } catch (e) {
+    return [];
+  }
+}
+
+function drawHist() {
+  const h = hist();
+  $('histList').innerHTML = h.length 
+    ? h.map((c, i) => `
+        <div>
+          <span><a data-l="${i}">${esc(c.produk) || '(Tanpa Nama)'}</a> <span class="empty">(${esc(c.pemohon) || 'Pemohon tidak diisi'})</span></span>
+          <button class="danger" data-d="${i}">Hapus</button>
+        </div>
+      `).join('')
+    : '<span class="empty">Belum ada riwayat kasus tersimpan.</span>';
+}
+
+$('histList').onclick = e => {
+  const h = hist(), l = e.target.dataset.l, x = e.target.dataset.d;
+  if (l !== undefined) {
+    write(h[l]);
+    run();
+  }
+  if (x !== undefined) {
+    h.splice(x, 1);
+    try { localStorage.setItem('ctdCases', JSON.stringify(h)); } catch (e) {}
+    drawHist();
+  }
+};
+
+$('sv').onclick = () => {
+  if (!cur) run();
+  const h = hist();
+  h.unshift(read());
+  try {
+    localStorage.setItem('ctdCases', JSON.stringify(h.slice(0, 50)));
+  } catch (e) {
+    alert('Penyimpanan lokal browser tidak tersedia.');
+  }
+  drawHist();
+};
+
+drawHist();
+</script>
+</body>
+</html>

@@ -1,6 +1,7 @@
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 generator client {
@@ -75,7 +76,7 @@ model Case {
   evaluationDate     String?
   responseDeadline   String?
   reviewerNotes      String?       @db.Text
-  rawFormData        String        @db.LongText // JSON object containing all inputs from tes.html
+  rawFormData        String        @db.Text // JSON object containing all inputs from tes.html
   createdAt          DateTime      @default(now())
   updatedAt          DateTime      @updatedAt
 
@@ -88,13 +89,13 @@ model CaseVersion {
   caseId               String
   case                 Case     @relation(fields: [caseId], references: [id], onDelete: Cascade)
   versionNumber        Int
-  formDataSnapshot     String   @db.LongText // JSON snapshot of form data at this run
+  formDataSnapshot     String   @db.Text // JSON snapshot of form data at this run
   verdict              String
   summaryS             Int      @default(0)
   summaryK             Int      @default(0)
   summaryT             Int      @default(0)
-  gapAnalysisResults   String   @db.LongText // JSON array of gap analysis findings
-  deficiencyLetterText String   @db.LongText // Full text of the generated letter
+  gapAnalysisResults   String   @db.Text // JSON array of gap analysis findings
+  deficiencyLetterText String   @db.Text // Full text of the generated letter
   createdById          String
   createdBy            User     @relation(fields: [createdById], references: [id])
   createdAt            DateTime @default(now())
@@ -121,7 +122,7 @@ model AuditLog {
   entity    String
   entityId  String?
   summary   String   @db.Text
-  details   String?  @db.LongText // JSON additional details
+  details   String?  @db.Text // JSON additional details
   ipAddress String?
   createdAt DateTime @default(now())
 }
@@ -129,6 +130,6 @@ model AuditLog {
 model SystemSetting {
   id        String   @id @default(cuid())
   key       String   @unique
-  value     String   @db.LongText
+  value     String   @db.Text
   updatedAt DateTime @updatedAt
 }
